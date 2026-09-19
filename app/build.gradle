@@ -28,7 +28,12 @@ android {
 
     lintOptions {
         checkReleaseBuilds false
+disable 'ExpiredTargetSdkVersion'
     }
+lint
+{
+disable 'ExpiredTargetSdkVersion'
+}
 
     ndkVersion '24.0.8215888'
 
