@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
+import com.winlator.core.EnvVars;
 import com.winlator.core.FileUtils;
 import com.winlator.core.NetworkHelper;
 import com.winlator.xenvironment.EnvironmentComponent;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class NetworkInfoUpdateComponent extends EnvironmentComponent {
     private BroadcastReceiver broadcastReceiver;
+	private EnvVars envVars;
 
     @Override
     public void start() {
@@ -59,8 +61,33 @@ public class NetworkInfoUpdateComponent extends EnvironmentComponent {
     }
 
     private void updateEtcHostsFile(String ipAddress) {
-        String ip = ipAddress != null ? ipAddress : "127.0.0.1";
-        File file = new File(environment.getRootFS().getRootDir(), "etc/hosts");
-        FileUtils.writeString(file, ip+"\tlocalhost\n");
-    }
+		String ip = ipAddress != null ? ipAddress : "127.0.0.1";
+
+		StringBuilder content = new StringBuilder();
+		content.append(ip).append("\tlocalhost\n");
+
+		if (envVars != null) {
+			for (String name : envVars) {
+				if (!name.startsWith("HOST_")) continue;
+
+				String hostname = name.substring(5);
+				String hostIp = envVars.get(name);
+
+				if (hostname.isEmpty() || hostIp.isEmpty()) continue;
+
+				// Prevent malformed values from injecting additional hosts entries.
+				if (hostname.contains("\n") || hostname.contains("\r") ||
+					hostIp.contains("\n") || hostIp.contains("\r")) continue;
+
+				content.append(hostIp).append("\t").append(hostname).append("\n");
+			}
+		}
+
+		File file = new File(environment.getRootFS().getRootDir(), "etc/hosts");
+		FileUtils.writeString(file, content.toString());
+	}
+
+	public void setEnvVars(EnvVars envVars) {
+		this.envVars = envVars;
+	}
 }
