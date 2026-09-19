@@ -9,7 +9,11 @@ This repository stores the latest updates for the Winlator app source.<br>
 For more information and releases, please visit the main repository: https://github.com/brunodev85/winlator
 
 # added feature
-enviroment variables support HOST_hostname.com=127.0.0.1 for adding to hostname 
+Set custom hosts file hostnames using environment variables
+example:
+HOST_hostname.com=127.0.0.1
+
+test using in `ping hostname.com` in cmd
 
 # Credits and Third-party apps
 
