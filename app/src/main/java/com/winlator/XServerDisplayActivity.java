@@ -520,7 +520,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         environment = new XEnvironment(this, rootFS);
         environment.addComponent(new SysVSharedMemoryComponent(xServer, UnixSocketConfig.create(rootPath, UnixSocketConfig.SYSVSHM_SERVER_PATH)));
         environment.addComponent(new XServerComponent(xServer, UnixSocketConfig.create(rootPath, UnixSocketConfig.XSERVER_PATH)));
-        environment.addComponent(new NetworkInfoUpdateComponent());
+		NetworkInfoUpdateComponent networkInfoUpdateComponent = new NetworkInfoUpdateComponent();
+		networkInfoUpdateComponent.setEnvVars(envVars);
+		environment.addComponent(networkInfoUpdateComponent);
 
         if (audioDriver.equals(AudioDrivers.ALSA)) {
             envVars.put("ANDROID_ALSA_SERVER", rootPath+UnixSocketConfig.ALSA_SERVER_PATH);
