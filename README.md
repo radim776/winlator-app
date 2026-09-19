@@ -8,6 +8,9 @@ Winlator is an Android application that lets you to run Windows (x86_64) applica
 This repository stores the latest updates for the Winlator app source.<br>
 For more information and releases, please visit the main repository: https://github.com/brunodev85/winlator
 
+# added feature
+enviroment variables support HOST_hostname.com=127.0.0.1 for adding to hostname 
+
 # Credits and Third-party apps
 
 - GLIBC Patches by [Termux Pacman](https://github.com/termux-pacman/glibc-packages)
